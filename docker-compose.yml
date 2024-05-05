@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  rotator-db:
+    container_name: rotator-db
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rotator
+    ports:
+      - "5432:5432"

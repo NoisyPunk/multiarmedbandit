@@ -28,7 +28,6 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP)
 	defer cancel()
 
-	// get config
 	config, err := rotatorconfig.GetConfig(configFile)
 	if err != nil {
 		fmt.Printf("can't get config from config file: %s", err.Error())

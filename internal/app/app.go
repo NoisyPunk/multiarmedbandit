@@ -3,8 +3,9 @@ package rotator
 import (
 	"context"
 	"fmt"
-	"github.com/NoisyPunk/multiarmedbandit/internal/configs"
+	rotatorconfig "github.com/NoisyPunk/multiarmedbandit/internal/configs"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
+	"github.com/google/uuid"
 )
 
 type App struct {
@@ -24,4 +25,39 @@ func New(ctx context.Context, config *rotatorconfig.Config) (*App, error) {
 	return &App{
 		Storage: *store,
 	}, nil
+}
+
+type Application interface {
+	AddBanner(ctx context.Context, description string) (id uuid.UUID, err error)
+	AddGroup(ctx context.Context, description string) (id uuid.UUID, err error)
+	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
+	AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error)
+	ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotationID, bannerID uuid.UUID, err error)
+	RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error)
+}
+
+func (a App) AddBanner(ctx context.Context, description string) (id uuid.UUID, err error) {
+	return a.Storage.AddBanner(ctx, description)
+}
+
+func (a App) AddGroup(ctx context.Context, description string) (id uuid.UUID, err error) {
+	return a.Storage.AddGroup(ctx, description)
+}
+
+func (a App) AddSlot(ctx context.Context, description string) (id uuid.UUID, err error) {
+	return a.Storage.AddSlot(ctx, description)
+}
+
+func (a App) AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error) {
+	return a.Storage.AddRotation(ctx, bannerId, slotId, groupId)
+}
+
+func (a App) ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotationID, bannerID uuid.UUID, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (a App) RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error) {
+	//TODO implement me
+	panic("implement me")
 }

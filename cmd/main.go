@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	rotator "github.com/NoisyPunk/multiarmedbandit/internal/app"
 	"github.com/NoisyPunk/multiarmedbandit/internal/configs"
 	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
@@ -42,7 +43,11 @@ func main() {
 		log.Error("migration has failed", zap.String("error_message", err.Error()))
 		os.Exit(1)
 	}
-	// get app
+	_, err = rotator.New(ctx, config)
+	if err != nil {
+		log.Error("app creation has failed", zap.String("error_message", err.Error()))
+		os.Exit(1)
+	}
 
 	//create server
 

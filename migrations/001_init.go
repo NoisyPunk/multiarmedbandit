@@ -25,6 +25,14 @@ func Up001(tx *sql.Tx) error {
 			id              uuid primary key,
             description text
             );
+			CREATE TABLE rotations (
+			id uuid primary key,
+			slot_id uuid REFERENCES slots(id),
+			banner_id uuid REFERENCES banners(id),
+			group_id uuid REFERENCES groups(id),
+			clicks int,
+			shows int
+			)
 			`
 	_, err := tx.Exec(query)
 	if err != nil {

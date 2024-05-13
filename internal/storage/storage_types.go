@@ -34,17 +34,13 @@ type Storager interface {
 	Connect(ctx context.Context, dsn string) (err error)
 	Close() error
 	AddBanner(ctx context.Context, description string) (id uuid.UUID, err error)
-	//GetBanner(ctx context.Context, id uuid.UUID) (banner Banner, err error)
-	//RandomBanner(ctx context.Context, slotID uuid.UUID) (banner Banner, err error)
-	//RemoveBanner(ctx context.Context, id uuid.UUID) error
-	//UpdateBannerStatistics(ctx context.Context, bannerID uuid.UUID, click bool) (err error)
 
 	AddGroup(ctx context.Context, description string) (id uuid.UUID, err error)
-	//RemoveGroup(ctx context.Context, id uuid.UUID) error
 
 	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
-	//RemoveSlot(ctx context.Context, id uuid.UUID) error
 
 	AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error)
-	GetRotationsForSlot(ctx context.Context, slotId uuid.UUID) (rotations []Rotation, err error)
+	GetRotationsForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotations []Rotation, err error)
+	RegisterClick(ctx context.Context, rotationId uuid.UUID) (err error)
+	RegisterShown(ctx context.Context, rotationId uuid.UUID) (err error)
 }

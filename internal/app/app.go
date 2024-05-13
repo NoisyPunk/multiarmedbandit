@@ -3,6 +3,7 @@ package rotator
 import (
 	"context"
 	"fmt"
+	"github.com/NoisyPunk/multiarmedbandit/internal/algorithm"
 	rotatorconfig "github.com/NoisyPunk/multiarmedbandit/internal/configs"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"github.com/google/uuid"
@@ -32,7 +33,7 @@ type Application interface {
 	AddGroup(ctx context.Context, description string) (id uuid.UUID, err error)
 	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
 	AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error)
-	ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotationID, bannerID uuid.UUID, err error)
+	ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (bannerID uuid.UUID, err error)
 	RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error)
 }
 
@@ -52,12 +53,16 @@ func (a App) AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUI
 	return a.Storage.AddRotation(ctx, bannerId, slotId, groupId)
 }
 
-func (a App) ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotationID, bannerID uuid.UUID, err error) {
-	//TODO implement me
-	panic("implement me")
+func (a App) ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (bannerID uuid.UUID, err error) {
+	rotations, err := a.Storage.GetRotationsForSlot(ctx, slotId, groupId)
+	bestRotation, err := algorithm.ChooseBanner(rotations)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	err = a.Storage.RegisterShown(ctx, bestRotation.Id)
+	return bestRotation.BannerId, err
 }
 
 func (a App) RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error) {
-	//TODO implement me
-	panic("implement me")
+	return a.Storage.RegisterClick(ctx, rotationID)
 }

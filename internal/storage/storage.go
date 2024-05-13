@@ -124,15 +124,44 @@ func (s *Storage) AddRotation(ctx context.Context, bannerId, slotId, groupId uui
 	return rotationID, nil
 }
 
-func (s *Storage) GetRotationsForSlot(ctx context.Context, slotId uuid.UUID) (rotations []Rotation, err error) {
+func (s *Storage) GetRotationsForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotations []Rotation, err error) {
 	l := logger.FromContext(ctx)
 
-	query := `SELECT * FROM rotations where slot_id = $1`
+	query := `SELECT * FROM rotations where slot_id = $1 and group_id = $2`
 
-	err = s.DB.Select(&rotations, query, slotId)
+	err = s.DB.Select(&rotations, query, slotId, groupId)
 	if err != nil {
 		return nil, err
 	}
 	l.Info("rotation list generated:", zap.String("slot_id", slotId.String()))
 	return rotations, nil
+}
+
+func (s *Storage) RegisterClick(ctx context.Context, rotationId uuid.UUID) (err error) {
+	l := logger.FromContext(ctx)
+
+	query := `UPDATE rotations SET clicks = clicks + 1 WHERE id = $1`
+
+	_, err = s.DB.NamedQuery(query, rotationId)
+	if err != nil {
+		l.Error(err.Error(), zap.String("rotation_id:", rotationId.String()))
+		return err
+	}
+	l.Info("rotation updated:", zap.String("rotation_id:", rotationId.String()))
+	return nil
+}
+
+func (s *Storage) RegisterShown(ctx context.Context, rotationId uuid.UUID) (err error) {
+	l := logger.FromContext(ctx)
+
+	query := `UPDATE rotations SET shows = shows + 1 WHERE id = $1`
+
+	_, err = s.DB.NamedQuery(query, rotationId)
+	if err != nil {
+		l.Error(err.Error(), zap.String("rotation_id:", rotationId.String()))
+		return err
+	}
+	l.Info("rotation updated:", zap.String("rotation_id:", rotationId.String()))
+	return nil
+
 }

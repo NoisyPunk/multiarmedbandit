@@ -7,11 +7,14 @@ import (
 	rotator "github.com/NoisyPunk/multiarmedbandit/internal/app"
 	"github.com/NoisyPunk/multiarmedbandit/internal/configs"
 	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
+	internalgrpc "github.com/NoisyPunk/multiarmedbandit/internal/server/grpc"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"go.uber.org/zap"
 	"os"
 	"os/signal"
+	"sync"
 	"syscall"
+	"time"
 )
 
 var configFile string
@@ -43,17 +46,30 @@ func main() {
 		log.Error("migration has failed", zap.String("error_message", err.Error()))
 		os.Exit(1)
 	}
-	_, err = rotator.New(ctx, config)
+	app, err := rotator.New(ctx, config)
 	if err != nil {
 		log.Error("app creation has failed", zap.String("error_message", err.Error()))
 		os.Exit(1)
 	}
 
-	//create server
+	grpcServer := internalgrpc.NewGRPCServer(ctx, app, config.Server.GrpcPort)
 
-	// shutdown server rules
+	wg := sync.WaitGroup{}
 
-	// start servers
+	wg.Add(1)
+	go func() {
+		<-ctx.Done()
+		grpcServer.Stop()
+		wg.Done()
+	}()
 
-	// wait for end
+	go func() {
+		if err = grpcServer.Start(); err != nil {
+			log.Error("failed to start grpc server", zap.String("error", err.Error()))
+			grpcServer.Stop()
+		}
+	}()
+
+	log.Info("rotator is running...", zap.String("start_time", time.Now().String()))
+	wg.Wait()
 }

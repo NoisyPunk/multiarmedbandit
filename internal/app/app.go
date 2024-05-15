@@ -32,9 +32,9 @@ type Application interface {
 	AddBanner(ctx context.Context, description string) (id uuid.UUID, err error)
 	AddGroup(ctx context.Context, description string) (id uuid.UUID, err error)
 	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
-	AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error)
+	AddRotation(ctx context.Context, bannerId, slotId, groupId string) (id uuid.UUID, err error)
 	ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (bannerID uuid.UUID, err error)
-	RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error)
+	RegisterClick(ctx context.Context, rotationID string) (err error)
 }
 
 func (a App) AddBanner(ctx context.Context, description string) (id uuid.UUID, err error) {
@@ -49,8 +49,20 @@ func (a App) AddSlot(ctx context.Context, description string) (id uuid.UUID, err
 	return a.Storage.AddSlot(ctx, description)
 }
 
-func (a App) AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error) {
-	return a.Storage.AddRotation(ctx, bannerId, slotId, groupId)
+func (a App) AddRotation(ctx context.Context, bannerId, slotId, groupId string) (id uuid.UUID, err error) {
+	bannerUUID, err := uuid.Parse(bannerId)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	slotUUID, err := uuid.Parse(slotId)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	groupUUID, err := uuid.Parse(groupId)
+	if err != nil {
+		return uuid.Nil, err
+	}
+	return a.Storage.AddRotation(ctx, bannerUUID, slotUUID, groupUUID)
 }
 
 func (a App) ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (bannerID uuid.UUID, err error) {
@@ -63,6 +75,10 @@ func (a App) ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID)
 	return bestRotation.BannerId, err
 }
 
-func (a App) RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error) {
-	return a.Storage.RegisterClick(ctx, rotationID)
+func (a App) RegisterClick(ctx context.Context, rotationID string) (err error) {
+	rotationUUID, err := uuid.Parse(rotationID)
+	if err != nil {
+		return err
+	}
+	return a.Storage.RegisterClick(ctx, rotationUUID)
 }

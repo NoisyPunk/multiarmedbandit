@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package rotator;
+
+option go_package = "./;pb";
+
+service Rotator {
+  rpc AddBanner (AddBannerRequest) returns (AddBannerResponse) {}
+  rpc AddGroup (AddGroupRequest) returns (AddGroupResponse) {}
+  rpc AddSlot (AddSlotRequest) returns (AddSlotResponse) {}
+  rpc AddRotation (AddRotationRequest) returns (AddRotationResponse) {}
+  rpc RegisterClick (RegisterClickRequest) returns (RegisterClickResponse) {}
+}
+
+message AddBannerRequest {
+  string description = 1;
+}
+
+message AddBannerResponse {
+  string banner_id = 1;
+  string message = 2;
+}
+message AddGroupRequest {
+  string description = 1;
+}
+
+message AddGroupResponse {
+  string group_id = 1;
+  string message = 2;
+}
+
+message AddSlotRequest {
+  string description = 1;
+}
+
+message AddSlotResponse {
+  string slot_id = 1;
+  string message = 2;
+}
+
+message AddRotationRequest {
+  string banner_id = 1;
+  string slot_id = 2;
+  string group_id = 3;
+}
+
+message AddRotationResponse {
+  string rotation_id = 1;
+  string message = 2;
+}
+
+message RegisterClickRequest {
+  string rotation_id = 1;
+}
+
+message RegisterClickResponse {
+  string message = 1;
+}

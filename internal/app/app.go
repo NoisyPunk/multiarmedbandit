@@ -33,7 +33,7 @@ type Application interface {
 	AddGroup(ctx context.Context, description string) (id uuid.UUID, err error)
 	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
 	AddRotation(ctx context.Context, bannerId, slotId, groupId string) (id uuid.UUID, err error)
-	ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (bannerID uuid.UUID, err error)
+	ChooseRotationForSlot(ctx context.Context, slotId, groupId string) (rotation storage.Rotation, err error)
 	RegisterClick(ctx context.Context, rotationID string) (err error)
 }
 
@@ -65,14 +65,22 @@ func (a App) AddRotation(ctx context.Context, bannerId, slotId, groupId string) 
 	return a.Storage.AddRotation(ctx, bannerUUID, slotUUID, groupUUID)
 }
 
-func (a App) ChooseBannerForSlot(ctx context.Context, slotId, groupId uuid.UUID) (bannerID uuid.UUID, err error) {
-	rotations, err := a.Storage.GetRotationsForSlot(ctx, slotId, groupId)
+func (a App) ChooseRotationForSlot(ctx context.Context, slotId, groupId string) (rotation storage.Rotation, err error) {
+	slotUUID, err := uuid.Parse(slotId)
+	if err != nil {
+		return rotation, err
+	}
+	groupUUID, err := uuid.Parse(groupId)
+	if err != nil {
+		return rotation, err
+	}
+	rotations, err := a.Storage.GetRotationsForSlot(ctx, slotUUID, groupUUID)
 	bestRotation, err := algorithm.ChooseBanner(rotations)
 	if err != nil {
-		return uuid.Nil, err
+		return rotation, err
 	}
 	err = a.Storage.RegisterShown(ctx, bestRotation.Id)
-	return bestRotation.BannerId, err
+	return bestRotation, err
 }
 
 func (a App) RegisterClick(ctx context.Context, rotationID string) (err error) {

@@ -103,7 +103,7 @@ func (s *Storage) AddSlot(ctx context.Context, description string) (id uuid.UUID
 func (s *Storage) AddRotation(ctx context.Context, bannerId, slotId, groupId uuid.UUID) (id uuid.UUID, err error) {
 	l := logger.FromContext(ctx)
 
-	query := `INSERT INTO rotations (id, banner_id, group_id, slot_id, clickes, shows) 
+	query := `INSERT INTO rotations (id, banner_id, group_id, slot_id, clicks, shows) 
 				VALUES(:id, :banner_id, :group_id, :slot_id, :clicks, :shows)`
 	rotationID := uuid.New()
 	rotation := Rotation{
@@ -142,7 +142,7 @@ func (s *Storage) RegisterClick(ctx context.Context, rotationId uuid.UUID) (err 
 
 	query := `UPDATE rotations SET clicks = clicks + 1 WHERE id = $1`
 
-	_, err = s.DB.NamedQuery(query, rotationId)
+	_, err = s.DB.Exec(query, rotationId)
 	if err != nil {
 		l.Error(err.Error(), zap.String("rotation_id:", rotationId.String()))
 		return err
@@ -156,7 +156,7 @@ func (s *Storage) RegisterShown(ctx context.Context, rotationId uuid.UUID) (err 
 
 	query := `UPDATE rotations SET shows = shows + 1 WHERE id = $1`
 
-	_, err = s.DB.NamedQuery(query, rotationId)
+	_, err = s.DB.Exec(query, rotationId)
 	if err != nil {
 		l.Error(err.Error(), zap.String("rotation_id:", rotationId.String()))
 		return err

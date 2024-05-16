@@ -1,6 +1,6 @@
 server:
   host: "localhost"
-  grpcPort: "8185"
+  grpcPort: "8186"
   logLevel: "debug"
 
 dsn:

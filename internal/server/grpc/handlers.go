@@ -66,3 +66,15 @@ func (g *GRPCServer) RegisterClick(ctx context.Context, req *pb.RegisterClickReq
 	}
 	return response, nil
 }
+
+func (g *GRPCServer) ShowBanner(ctx context.Context, req *pb.ShowBannerRequest) (*pb.ShowBannerResponse, error) {
+	rotation, err := g.application.ChooseRotationForSlot(ctx, req.SlotId, req.GroupId)
+	if err != nil {
+		return nil, err
+	}
+	response := &pb.ShowBannerResponse{
+		BannerId:   rotation.BannerId.String(),
+		RotationId: rotation.Id.String(),
+	}
+	return response, nil
+}

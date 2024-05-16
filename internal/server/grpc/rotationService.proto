@@ -10,6 +10,7 @@ service Rotator {
   rpc AddSlot (AddSlotRequest) returns (AddSlotResponse) {}
   rpc AddRotation (AddRotationRequest) returns (AddRotationResponse) {}
   rpc RegisterClick (RegisterClickRequest) returns (RegisterClickResponse) {}
+  rpc ShowBanner(ShowBannerRequest) returns (ShowBannerResponse) {}
 }
 
 message AddBannerRequest {
@@ -55,4 +56,14 @@ message RegisterClickRequest {
 
 message RegisterClickResponse {
   string message = 1;
+}
+
+message ShowBannerRequest {
+  string slot_id = 1;
+  string group_id = 2;
+}
+
+message ShowBannerResponse {
+  string banner_id = 1;
+  string rotation_id = 2;
 }

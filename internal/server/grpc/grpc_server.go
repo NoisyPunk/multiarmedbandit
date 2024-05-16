@@ -18,7 +18,7 @@ type GRPCServer struct {
 	application rotator.Application
 	server      *grpc.Server
 	port        string
-	pb.UnimplementedEventsServer
+	pb.UnimplementedRotatorServer
 }
 
 func (e *GRPCServer) Start() error {
@@ -30,7 +30,7 @@ func (e *GRPCServer) Start() error {
 	if err != nil {
 		return err
 	}
-	pb.RegisterEventsServer(e.server, e)
+	pb.RegisterRotatorServer(e.server, e)
 
 	go func() error {
 		err = e.server.Serve(listener)
@@ -50,9 +50,9 @@ func (e *GRPCServer) Stop() {
 
 func NewGRPCServer(ctx context.Context, app rotator.Application, port string) *GRPCServer {
 	return &GRPCServer{
-		ctx:                       ctx,
-		application:               app,
-		port:                      ":" + port,
-		UnimplementedEventsServer: pb.UnimplementedEventsServer{},
+		ctx:                        ctx,
+		application:                app,
+		port:                       ":" + port,
+		UnimplementedRotatorServer: pb.UnimplementedRotatorServer{},
 	}
 }

@@ -18,230 +18,266 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// EventsClient is the client API for Events service.
+// RotatorClient is the client API for Rotator service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type EventsClient interface {
+type RotatorClient interface {
 	AddBanner(ctx context.Context, in *AddBannerRequest, opts ...grpc.CallOption) (*AddBannerResponse, error)
 	AddGroup(ctx context.Context, in *AddGroupRequest, opts ...grpc.CallOption) (*AddGroupResponse, error)
 	AddSlot(ctx context.Context, in *AddSlotRequest, opts ...grpc.CallOption) (*AddSlotResponse, error)
 	AddRotation(ctx context.Context, in *AddRotationRequest, opts ...grpc.CallOption) (*AddRotationResponse, error)
 	RegisterClick(ctx context.Context, in *RegisterClickRequest, opts ...grpc.CallOption) (*RegisterClickResponse, error)
+	ShowBanner(ctx context.Context, in *ShowBannerRequest, opts ...grpc.CallOption) (*ShowBannerResponse, error)
 }
 
-type eventsClient struct {
+type rotatorClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewEventsClient(cc grpc.ClientConnInterface) EventsClient {
-	return &eventsClient{cc}
+func NewRotatorClient(cc grpc.ClientConnInterface) RotatorClient {
+	return &rotatorClient{cc}
 }
 
-func (c *eventsClient) AddBanner(ctx context.Context, in *AddBannerRequest, opts ...grpc.CallOption) (*AddBannerResponse, error) {
+func (c *rotatorClient) AddBanner(ctx context.Context, in *AddBannerRequest, opts ...grpc.CallOption) (*AddBannerResponse, error) {
 	out := new(AddBannerResponse)
-	err := c.cc.Invoke(ctx, "/rotator.Events/AddBanner", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/rotator.Rotator/AddBanner", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventsClient) AddGroup(ctx context.Context, in *AddGroupRequest, opts ...grpc.CallOption) (*AddGroupResponse, error) {
+func (c *rotatorClient) AddGroup(ctx context.Context, in *AddGroupRequest, opts ...grpc.CallOption) (*AddGroupResponse, error) {
 	out := new(AddGroupResponse)
-	err := c.cc.Invoke(ctx, "/rotator.Events/AddGroup", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/rotator.Rotator/AddGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventsClient) AddSlot(ctx context.Context, in *AddSlotRequest, opts ...grpc.CallOption) (*AddSlotResponse, error) {
+func (c *rotatorClient) AddSlot(ctx context.Context, in *AddSlotRequest, opts ...grpc.CallOption) (*AddSlotResponse, error) {
 	out := new(AddSlotResponse)
-	err := c.cc.Invoke(ctx, "/rotator.Events/AddSlot", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/rotator.Rotator/AddSlot", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventsClient) AddRotation(ctx context.Context, in *AddRotationRequest, opts ...grpc.CallOption) (*AddRotationResponse, error) {
+func (c *rotatorClient) AddRotation(ctx context.Context, in *AddRotationRequest, opts ...grpc.CallOption) (*AddRotationResponse, error) {
 	out := new(AddRotationResponse)
-	err := c.cc.Invoke(ctx, "/rotator.Events/AddRotation", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/rotator.Rotator/AddRotation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventsClient) RegisterClick(ctx context.Context, in *RegisterClickRequest, opts ...grpc.CallOption) (*RegisterClickResponse, error) {
+func (c *rotatorClient) RegisterClick(ctx context.Context, in *RegisterClickRequest, opts ...grpc.CallOption) (*RegisterClickResponse, error) {
 	out := new(RegisterClickResponse)
-	err := c.cc.Invoke(ctx, "/rotator.Events/RegisterClick", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/rotator.Rotator/RegisterClick", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// EventsServer is the server API for Events service.
-// All implementations must embed UnimplementedEventsServer
+func (c *rotatorClient) ShowBanner(ctx context.Context, in *ShowBannerRequest, opts ...grpc.CallOption) (*ShowBannerResponse, error) {
+	out := new(ShowBannerResponse)
+	err := c.cc.Invoke(ctx, "/rotator.Rotator/ShowBanner", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// RotatorServer is the server API for Rotator service.
+// All implementations must embed UnimplementedRotatorServer
 // for forward compatibility
-type EventsServer interface {
+type RotatorServer interface {
 	AddBanner(context.Context, *AddBannerRequest) (*AddBannerResponse, error)
 	AddGroup(context.Context, *AddGroupRequest) (*AddGroupResponse, error)
 	AddSlot(context.Context, *AddSlotRequest) (*AddSlotResponse, error)
 	AddRotation(context.Context, *AddRotationRequest) (*AddRotationResponse, error)
 	RegisterClick(context.Context, *RegisterClickRequest) (*RegisterClickResponse, error)
-	mustEmbedUnimplementedEventsServer()
+	ShowBanner(context.Context, *ShowBannerRequest) (*ShowBannerResponse, error)
+	mustEmbedUnimplementedRotatorServer()
 }
 
-// UnimplementedEventsServer must be embedded to have forward compatible implementations.
-type UnimplementedEventsServer struct {
+// UnimplementedRotatorServer must be embedded to have forward compatible implementations.
+type UnimplementedRotatorServer struct {
 }
 
-func (UnimplementedEventsServer) AddBanner(context.Context, *AddBannerRequest) (*AddBannerResponse, error) {
+func (UnimplementedRotatorServer) AddBanner(context.Context, *AddBannerRequest) (*AddBannerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddBanner not implemented")
 }
-func (UnimplementedEventsServer) AddGroup(context.Context, *AddGroupRequest) (*AddGroupResponse, error) {
+func (UnimplementedRotatorServer) AddGroup(context.Context, *AddGroupRequest) (*AddGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddGroup not implemented")
 }
-func (UnimplementedEventsServer) AddSlot(context.Context, *AddSlotRequest) (*AddSlotResponse, error) {
+func (UnimplementedRotatorServer) AddSlot(context.Context, *AddSlotRequest) (*AddSlotResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddSlot not implemented")
 }
-func (UnimplementedEventsServer) AddRotation(context.Context, *AddRotationRequest) (*AddRotationResponse, error) {
+func (UnimplementedRotatorServer) AddRotation(context.Context, *AddRotationRequest) (*AddRotationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddRotation not implemented")
 }
-func (UnimplementedEventsServer) RegisterClick(context.Context, *RegisterClickRequest) (*RegisterClickResponse, error) {
+func (UnimplementedRotatorServer) RegisterClick(context.Context, *RegisterClickRequest) (*RegisterClickResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterClick not implemented")
 }
-func (UnimplementedEventsServer) mustEmbedUnimplementedEventsServer() {}
+func (UnimplementedRotatorServer) ShowBanner(context.Context, *ShowBannerRequest) (*ShowBannerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ShowBanner not implemented")
+}
+func (UnimplementedRotatorServer) mustEmbedUnimplementedRotatorServer() {}
 
-// UnsafeEventsServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to EventsServer will
+// UnsafeRotatorServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to RotatorServer will
 // result in compilation errors.
-type UnsafeEventsServer interface {
-	mustEmbedUnimplementedEventsServer()
+type UnsafeRotatorServer interface {
+	mustEmbedUnimplementedRotatorServer()
 }
 
-func RegisterEventsServer(s grpc.ServiceRegistrar, srv EventsServer) {
-	s.RegisterService(&Events_ServiceDesc, srv)
+func RegisterRotatorServer(s grpc.ServiceRegistrar, srv RotatorServer) {
+	s.RegisterService(&Rotator_ServiceDesc, srv)
 }
 
-func _Events_AddBanner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Rotator_AddBanner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddBannerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventsServer).AddBanner(ctx, in)
+		return srv.(RotatorServer).AddBanner(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rotator.Events/AddBanner",
+		FullMethod: "/rotator.Rotator/AddBanner",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventsServer).AddBanner(ctx, req.(*AddBannerRequest))
+		return srv.(RotatorServer).AddBanner(ctx, req.(*AddBannerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Events_AddGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Rotator_AddGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddGroupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventsServer).AddGroup(ctx, in)
+		return srv.(RotatorServer).AddGroup(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rotator.Events/AddGroup",
+		FullMethod: "/rotator.Rotator/AddGroup",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventsServer).AddGroup(ctx, req.(*AddGroupRequest))
+		return srv.(RotatorServer).AddGroup(ctx, req.(*AddGroupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Events_AddSlot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Rotator_AddSlot_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddSlotRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventsServer).AddSlot(ctx, in)
+		return srv.(RotatorServer).AddSlot(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rotator.Events/AddSlot",
+		FullMethod: "/rotator.Rotator/AddSlot",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventsServer).AddSlot(ctx, req.(*AddSlotRequest))
+		return srv.(RotatorServer).AddSlot(ctx, req.(*AddSlotRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Events_AddRotation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Rotator_AddRotation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AddRotationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventsServer).AddRotation(ctx, in)
+		return srv.(RotatorServer).AddRotation(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rotator.Events/AddRotation",
+		FullMethod: "/rotator.Rotator/AddRotation",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventsServer).AddRotation(ctx, req.(*AddRotationRequest))
+		return srv.(RotatorServer).AddRotation(ctx, req.(*AddRotationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Events_RegisterClick_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Rotator_RegisterClick_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterClickRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventsServer).RegisterClick(ctx, in)
+		return srv.(RotatorServer).RegisterClick(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rotator.Events/RegisterClick",
+		FullMethod: "/rotator.Rotator/RegisterClick",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventsServer).RegisterClick(ctx, req.(*RegisterClickRequest))
+		return srv.(RotatorServer).RegisterClick(ctx, req.(*RegisterClickRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Events_ServiceDesc is the grpc.ServiceDesc for Events service.
+func _Rotator_ShowBanner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ShowBannerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RotatorServer).ShowBanner(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rotator.Rotator/ShowBanner",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RotatorServer).ShowBanner(ctx, req.(*ShowBannerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Rotator_ServiceDesc is the grpc.ServiceDesc for Rotator service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Events_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "rotator.Events",
-	HandlerType: (*EventsServer)(nil),
+var Rotator_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "rotator.Rotator",
+	HandlerType: (*RotatorServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddBanner",
-			Handler:    _Events_AddBanner_Handler,
+			Handler:    _Rotator_AddBanner_Handler,
 		},
 		{
 			MethodName: "AddGroup",
-			Handler:    _Events_AddGroup_Handler,
+			Handler:    _Rotator_AddGroup_Handler,
 		},
 		{
 			MethodName: "AddSlot",
-			Handler:    _Events_AddSlot_Handler,
+			Handler:    _Rotator_AddSlot_Handler,
 		},
 		{
 			MethodName: "AddRotation",
-			Handler:    _Events_AddRotation_Handler,
+			Handler:    _Rotator_AddRotation_Handler,
 		},
 		{
 			MethodName: "RegisterClick",
-			Handler:    _Events_RegisterClick_Handler,
+			Handler:    _Rotator_RegisterClick_Handler,
+		},
+		{
+			MethodName: "ShowBanner",
+			Handler:    _Rotator_ShowBanner_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

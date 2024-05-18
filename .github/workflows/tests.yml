@@ -27,6 +27,9 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: make build
+        run: make build-rotator
+
       - name: make lint
         run: make lint
         working-directory: .
@@ -34,6 +37,8 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: make build
+        run: make build-rotator
       - name: make test
         run: make test
         working-directory: .
@@ -41,6 +46,8 @@ jobs:
   integration-tests:
     runs-on: ubuntu-latest
     steps:
+      - name: make build
+        run: make build-rotator
       - name: make integration-tests
         run: make integration-tests
         working-directory: .

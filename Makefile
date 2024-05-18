@@ -4,10 +4,10 @@ DOCKER_IMG="rotator:develop"
 GIT_HASH := $(shell git log --format="%h" -n 1)
 LDFLAGS := -X main.release="develop" -X main.buildDate=$(shell date -u +%Y-%m-%dT%H:%M:%S) -X main.gitHash=$(GIT_HASH)
 
-build-rotator:
+build:
 	go build -v -o $(BIN) -ldflags "$(LDFLAGS)" ./cmd
 
-run-rotator: build-rotator
+run: build
 	$(BIN)/rotator -config ./configs/rotator_config.yaml
 
 build-img:
@@ -30,8 +30,7 @@ test:
 
 integration-tests:
 	docker-compose up -d --force-recreate && \
-	docker-compose -f docker-compose.integration_tests.yml up --force-recreate && \
-	docker-compose -f docker-compose.integration_tests.yml down && \
+	go test -race ./internal/server/...
 	docker-compose down
 
 install-lint-deps:

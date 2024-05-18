@@ -25,13 +25,13 @@ jobs:
         working-directory: .
 
       - name: make build
-        run: make build-rotator
+        run: make build
         working-directory: .
 
       - name: make test
         run: make test
         working-directory: .
 
-#      - name: make integration-tests
-#        run: make integration-tests
-#        working-directory: .
+      - name: make integration-tests
+        run: make integration-tests
+        working-directory: .

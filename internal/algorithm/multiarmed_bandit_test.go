@@ -1,7 +1,6 @@
 package algorithm
 
 import (
-	"github.com/stretchr/testify/require"
 	"math/rand"
 	"testing"
 	"time"
@@ -9,6 +8,7 @@ import (
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
+	"github.com/stretchr/testify/require"
 )
 
 func TestChooseBanner(t *testing.T) {

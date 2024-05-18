@@ -3,14 +3,13 @@ FROM golang:1.22-alpine AS builder
 WORKDIR /usr/local/src
 
 # Dependencies
-#COPY ["go.mod", "go.sum", "./"]
-#COPY . .
-#RUN go mod download
+COPY ["go.mod", "go.sum", "./"]
+COPY . .
+RUN go mod download
 
 # Build
 COPY . ./
 RUN go build -o ./bin/rotator cmd/main.go
-RUN go mod download
 
 #
 FROM alpine:3.9 AS runner

@@ -29,6 +29,7 @@ jobs:
     steps:
       - name: make build
         run: make build-rotator
+        working-directory: .
 
       - name: make lint
         run: make lint
@@ -39,6 +40,8 @@ jobs:
     steps:
       - name: make build
         run: make build-rotator
+        working-directory: .
+
       - name: make test
         run: make test
         working-directory: .
@@ -48,6 +51,8 @@ jobs:
     steps:
       - name: make build
         run: make build-rotator
+        working-directory: .
+
       - name: make integration-tests
         run: make integration-tests
         working-directory: .

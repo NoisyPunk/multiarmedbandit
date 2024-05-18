@@ -32,7 +32,7 @@ services:
   rotator:
     build:
       dockerfile: ./build/Dockerfile
-    image: rotator:latest
+#    image: rotator:latest
     container_name: rotator-app
     restart: always
     ports:

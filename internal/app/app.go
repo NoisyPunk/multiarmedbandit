@@ -3,6 +3,7 @@ package rotator
 import (
 	"context"
 	"fmt"
+
 	"github.com/NoisyPunk/multiarmedbandit/internal/algorithm"
 	rotatorconfig "github.com/NoisyPunk/multiarmedbandit/internal/configs"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
@@ -79,7 +80,7 @@ func (a App) ChooseRotationForSlot(ctx context.Context, slotId, groupId string) 
 	if err != nil {
 		return rotation, err
 	}
-	err = a.Storage.RegisterShown(ctx, bestRotation.Id)
+	err = a.Storage.RegisterShown(ctx, bestRotation.ID)
 	return bestRotation, err
 }
 

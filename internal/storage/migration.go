@@ -24,9 +24,6 @@ func Migrate(config *calendarconfig.Config) error {
 		return err
 	}
 
-	//if err = goose.Down(db, "./"); err != nil {
-	//	return err
-	//}
 	if err = goose.Up(db, "./"); err != nil {
 		return err
 	}

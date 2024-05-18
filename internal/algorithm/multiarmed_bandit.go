@@ -2,8 +2,9 @@ package algorithm
 
 import (
 	"fmt"
-	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"math/rand"
+
+	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 )
 
 var ErrEmptyRotationList = fmt.Errorf("rotation list is empty")
@@ -13,10 +14,10 @@ func ChooseBanner(rotations []storage.Rotation) (bestRotation storage.Rotation, 
 		return bestRotation, ErrEmptyRotationList
 	}
 	epsilon := 0.1
-	if rand.Float64() < epsilon {
+	if rand.Float64() < epsilon { //nolint: gosec
 		return randomRotation(rotations), err
 	}
-	var maxClicks = -1
+	maxClicks := -1
 	for _, rotation := range rotations {
 		if rotation.Clicks > maxClicks {
 			maxClicks = rotation.Clicks
@@ -31,5 +32,5 @@ func randomRotation(rotations []storage.Rotation) (randomRotation storage.Rotati
 	for _, rotation := range rotations {
 		bannerIDs = append(bannerIDs, rotation)
 	}
-	return bannerIDs[rand.Intn(len(bannerIDs))]
+	return bannerIDs[rand.Intn(len(bannerIDs))] //nolint: gosec
 }

@@ -56,7 +56,8 @@ func (g *GRPCServer) AddRotation(ctx context.Context, req *pb.AddRotationRequest
 	return response, nil
 }
 
-func (g *GRPCServer) RegisterClick(ctx context.Context, req *pb.RegisterClickRequest) (*pb.RegisterClickResponse, error) {
+func (g *GRPCServer) RegisterClick(ctx context.Context,
+	req *pb.RegisterClickRequest) (*pb.RegisterClickResponse, error) {
 	err := g.application.RegisterClick(ctx, req.RotationId)
 	if err != nil {
 		return nil, err
@@ -73,8 +74,8 @@ func (g *GRPCServer) ShowBanner(ctx context.Context, req *pb.ShowBannerRequest) 
 		return nil, err
 	}
 	response := &pb.ShowBannerResponse{
-		BannerId:   rotation.BannerId.String(),
-		RotationId: rotation.Id.String(),
+		BannerId:   rotation.BannerID.String(),
+		RotationId: rotation.ID.String(),
 	}
 	return response, nil
 }

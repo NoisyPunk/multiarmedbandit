@@ -3,13 +3,13 @@ package storage
 import (
 	"context"
 	"fmt"
+
 	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
 	"github.com/google/uuid"
-	"go.uber.org/zap"
-
 	"github.com/jmoiron/sqlx"
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // for db
 	"github.com/pkg/errors"
+	"go.uber.org/zap"
 )
 
 var (
@@ -47,7 +47,7 @@ func (s *Storage) AddBanner(ctx context.Context, description string) (id uuid.UU
 				VALUES(:id, :description)`
 	bannerID := uuid.New()
 	banner := Banner{
-		Id:          bannerID,
+		ID:          bannerID,
 		Description: description,
 	}
 
@@ -67,7 +67,7 @@ func (s *Storage) AddGroup(ctx context.Context, description string) (id uuid.UUI
 				VALUES(:id, :description)`
 	groupID := uuid.New()
 	group := Group{
-		Id:          groupID,
+		ID:          groupID,
 		Description: description,
 	}
 
@@ -87,7 +87,7 @@ func (s *Storage) AddSlot(ctx context.Context, description string) (id uuid.UUID
 				VALUES(:id, :description)`
 	slotID := uuid.New()
 	group := Slot{
-		Id:          slotID,
+		ID:          slotID,
 		Description: description,
 	}
 
@@ -107,10 +107,10 @@ func (s *Storage) AddRotation(ctx context.Context, bannerId, slotId, groupId uui
 				VALUES(:id, :banner_id, :group_id, :slot_id, :clicks, :shows)`
 	rotationID := uuid.New()
 	rotation := Rotation{
-		Id:       rotationID,
-		BannerId: bannerId,
-		GroupId:  groupId,
-		SlotId:   slotId,
+		ID:       rotationID,
+		BannerID: bannerId,
+		GroupID:  groupId,
+		SlotID:   slotId,
 		Clicks:   0,
 		Shows:    0,
 	}
@@ -124,7 +124,8 @@ func (s *Storage) AddRotation(ctx context.Context, bannerId, slotId, groupId uui
 	return rotationID, nil
 }
 
-func (s *Storage) GetRotationsForSlot(ctx context.Context, slotId, groupId uuid.UUID) (rotations []Rotation, err error) {
+func (s *Storage) GetRotationsForSlot(ctx context.Context,
+	slotId, groupId uuid.UUID) (rotations []Rotation, err error) {
 	l := logger.FromContext(ctx)
 
 	query := `SELECT * FROM rotations where slot_id = $1 and group_id = $2`
@@ -163,5 +164,4 @@ func (s *Storage) RegisterShown(ctx context.Context, rotationId uuid.UUID) (err 
 	}
 	l.Info("rotation updated:", zap.String("rotation_id:", rotationId.String()))
 	return nil
-
 }

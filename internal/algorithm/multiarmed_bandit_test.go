@@ -1,12 +1,13 @@
 package algorithm
 
 import (
-	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
-	"github.com/google/uuid"
 	"math/rand"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
+	"github.com/google/uuid"
 )
 
 func TestChooseBanner(t *testing.T) {
@@ -30,19 +31,19 @@ func TestChooseBanner(t *testing.T) {
 			name: "single rotation",
 			rotations: []storage.Rotation{
 				{
-					Id:       id1,
-					BannerId: id2,
-					GroupId:  id3,
-					SlotId:   id4,
+					ID:       id1,
+					BannerID: id2,
+					GroupID:  id3,
+					SlotID:   id4,
 					Clicks:   10,
 					Shows:    0,
 				},
 			},
 			expected: storage.Rotation{
-				Id:       id1,
-				BannerId: id2,
-				GroupId:  id3,
-				SlotId:   id4,
+				ID:       id1,
+				BannerID: id2,
+				GroupID:  id3,
+				SlotID:   id4,
 				Clicks:   10,
 				Shows:    0,
 			},
@@ -51,35 +52,35 @@ func TestChooseBanner(t *testing.T) {
 			name: "multiple rotations",
 			rotations: []storage.Rotation{
 				{
-					Id:       id1,
-					BannerId: id2,
-					GroupId:  id3,
-					SlotId:   id4,
+					ID:       id1,
+					BannerID: id2,
+					GroupID:  id3,
+					SlotID:   id4,
 					Clicks:   10,
 					Shows:    0,
 				},
 				{
-					Id:       id2,
-					BannerId: id3,
-					GroupId:  id4,
-					SlotId:   id1,
+					ID:       id2,
+					BannerID: id3,
+					GroupID:  id4,
+					SlotID:   id1,
 					Clicks:   20,
 					Shows:    0,
 				},
 				{
-					Id:       id3,
-					BannerId: id4,
-					GroupId:  id1,
-					SlotId:   id2,
+					ID:       id3,
+					BannerID: id4,
+					GroupID:  id1,
+					SlotID:   id2,
 					Clicks:   30,
 					Shows:    0,
 				},
 			},
 			expected: storage.Rotation{
-				Id:       id3,
-				BannerId: id4,
-				GroupId:  id1,
-				SlotId:   id2,
+				ID:       id3,
+				BannerID: id4,
+				GroupID:  id1,
+				SlotID:   id2,
 				Clicks:   30,
 				Shows:    0,
 			},

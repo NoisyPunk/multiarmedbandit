@@ -127,7 +127,7 @@ func (s *Storage) AddRotation(ctx context.Context, bannerID, slotID, groupID uui
 func (s *Storage) GetRotation(ctx context.Context, rotationID uuid.UUID) (rotation Rotation, err error) {
 	l := logger.FromContext(ctx)
 
-	query := `SELECT * FROM rotations where rotation_id = $1`
+	query := `SELECT * FROM rotations where id = $1`
 
 	err = s.DB.Select(&rotation, query, rotationID)
 	if err != nil {

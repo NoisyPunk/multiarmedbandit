@@ -23,7 +23,7 @@ var configFile string
 func init() {
 	flag.StringVar(&configFile,
 		"rotator_config",
-		"./configs/rotator_config.yaml",
+		"./rotator_config.yaml",
 		"path to rotator configuration file",
 	)
 }

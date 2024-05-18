@@ -9,7 +9,7 @@ env:
   GO111MODULE: "on"
 
 jobs:
-  build:
+  rotator-pipe:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go
@@ -20,37 +20,16 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: make build
-        run: make build-rotator
-        working-directory: .
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: make build
-        run: make build-rotator
-        working-directory: .
-
       - name: make lint
         run: make lint
         working-directory: .
 
-  unit-tests:
-    runs-on: ubuntu-latest
-    steps:
       - name: make build
-        run: make build-rotator
+        run: make build
         working-directory: .
 
       - name: make test
         run: make test
-        working-directory: .
-
-  integration-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - name: make build
-        run: make build-rotator
         working-directory: .
 
       - name: make integration-tests

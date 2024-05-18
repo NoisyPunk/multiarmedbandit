@@ -20,7 +20,7 @@ func TestGRPCServer(t *testing.T) {
 
 	DBstorage := storage.New()
 
-	dsn := "host=localhost port=5432 user=postgres password=postgres dbname=rotator sslmode=disable"
+	dsn := "host=127.0.0.1 port=5432 user=postgres password=postgres dbname=rotator sslmode=disable"
 
 	err := DBstorage.Connect(context.Background(), dsn)
 	require.NoError(t, err)
@@ -40,7 +40,7 @@ func TestGRPCServer(t *testing.T) {
 		}
 	}()
 
-	conn, err := grpc.Dial("localhost:8186", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("127.0.0.1:8186", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	require.NoError(t, err)
 
 	client := pb.NewRotatorClient(conn)

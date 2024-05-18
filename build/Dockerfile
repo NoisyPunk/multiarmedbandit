@@ -14,7 +14,7 @@ FROM alpine:3.9 AS runner
 #
 COPY --from=builder /usr/local/src/bin /
 
-#COPY configs/rotator_config.yaml /rotator_config.yaml
+COPY configs/rotator_config.yaml /rotator_config.yaml
 COPY migrations/* /
 
 CMD ["/rotator"]

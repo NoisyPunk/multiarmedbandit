@@ -14,6 +14,10 @@ import (
 )
 
 func TestGRPCServer(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping test in short mode.")
+	}
+
 	DBstorage := storage.New()
 
 	dsn := "host=localhost port=5432 user=postgres password=postgres dbname=rotator sslmode=disable"

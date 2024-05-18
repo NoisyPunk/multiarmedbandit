@@ -26,7 +26,7 @@ generate:
 	go generate ./...
 
 test:
-	go test -race ./internal/...
+	go test -race ./internal/... -short
 
 integration-tests:
 	docker-compose up -d --force-recreate && \

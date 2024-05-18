@@ -1,8 +1,8 @@
 package algorithm
 
 import (
+	"github.com/stretchr/testify/require"
 	"math/rand"
-	"reflect"
 	"testing"
 	"time"
 
@@ -78,7 +78,7 @@ func TestChooseBanner(t *testing.T) {
 				},
 			},
 			expected: storage.Rotation{
-				ID:       id3,
+				ID:       id2,
 				BannerID: id4,
 				GroupID:  id1,
 				SlotID:   id2,
@@ -95,9 +95,58 @@ func TestChooseBanner(t *testing.T) {
 			if !errors.Is(err, tt.expectedErr) {
 				t.Errorf("expected error %v, got %v", tt.expectedErr, err)
 			}
-			if !reflect.DeepEqual(bestRotation, tt.expected) {
-				t.Errorf("expected rotation %v, got %v", tt.expected, bestRotation)
+			require.Equal(t, bestRotation, tt.expected)
+		})
+	}
+}
+
+func TestChooseBannerProportions(t *testing.T) {
+	id1, _ := uuid.Parse("936da01f-9abd-4d9d-80c4-02af85c295a7")
+	id2, _ := uuid.Parse("874213e5-5c2b-43e3-9c7f-1a3b5c7d8e9f")
+
+	tests := []struct {
+		name         string
+		rotations    []storage.Rotation
+		showQuantity int
+	}{
+		{
+			name: "test show count",
+			rotations: []storage.Rotation{
+				{
+					ID:       id1,
+					BannerID: id1,
+					GroupID:  id1,
+					SlotID:   id1,
+					Clicks:   10,
+					Shows:    0,
+				},
+				{
+					ID:       id2,
+					BannerID: id2,
+					GroupID:  id2,
+					SlotID:   id2,
+					Clicks:   30,
+					Shows:    0,
+				},
+			},
+			showQuantity: 100,
+		},
+	}
+
+	for _, tt := range tests {
+		bbr := 0
+		wbr := 0
+		t.Run(tt.name, func(t *testing.T) {
+			rand.New(rand.NewSource(time.Now().UnixNano()))
+			for i := 0; i < tt.showQuantity; i++ {
+				bestRotation, _ := ChooseBanner(tt.rotations)
+				if bestRotation.ID == id2 {
+					bbr++
+					continue
+				}
+				wbr++
 			}
+			require.True(t, bbr > wbr)
 		})
 	}
 }

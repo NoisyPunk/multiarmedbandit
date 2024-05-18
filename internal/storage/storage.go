@@ -135,7 +135,6 @@ func (s *Storage) GetRotation(ctx context.Context, rotationID uuid.UUID) (rotati
 	}
 	l.Info("rotation list generated:", zap.String("rotation_id", rotationID.String()))
 	return rotation, nil
-
 }
 
 func (s *Storage) GetSlotRotations(ctx context.Context, slotID, groupID uuid.UUID) (rotations []Rotation, err error) {

@@ -4,16 +4,16 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
-	"github.com/NoisyPunk/multiarmedbandit/internal/queue"
-	"github.com/streadway/amqp"
-	"go.uber.org/zap"
 	"time"
 
 	"github.com/NoisyPunk/multiarmedbandit/internal/algorithm"
 	rotatorconfig "github.com/NoisyPunk/multiarmedbandit/internal/configs"
+	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
+	"github.com/NoisyPunk/multiarmedbandit/internal/queue"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"github.com/google/uuid"
+	"github.com/streadway/amqp"
+	"go.uber.org/zap"
 )
 
 type App struct {
@@ -149,7 +149,6 @@ func (a App) publishClick(ctx context.Context, rotationID uuid.UUID) (err error)
 		},
 	)
 	return err
-
 }
 
 func (a App) publishShown(ctx context.Context, rotation storage.Rotation) (err error) {

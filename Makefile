@@ -29,7 +29,7 @@ test:
 	go test -race ./internal/... -short
 
 integration-tests:
-	docker-compose up -d --force-recreate && \
+	docker-compose up -d --force-recreate --remove-orphans && \
 	go test -race ./internal/server/...
 	docker-compose down
 

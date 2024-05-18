@@ -5,11 +5,13 @@ WORKDIR /usr/local/src
 # Dependencies
 #COPY ["go.mod", "go.sum", "./"]
 #COPY . .
-RUN go mod download
+#RUN go mod download
 
 # Build
 COPY . ./
 RUN go build -o ./bin/rotator cmd/main.go
+RUN go mod download
+
 #
 FROM alpine:3.9 AS runner
 #

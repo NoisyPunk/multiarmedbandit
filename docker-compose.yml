@@ -30,8 +30,7 @@ services:
       some_network:
 
   rotator:
-    build:
-      dockerfile: ./build/Dockerfile
+    build: ./build/Dockerfile
     image: rotator:latest
     container_name: rotator-app
     restart: always

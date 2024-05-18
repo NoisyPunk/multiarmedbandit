@@ -8,6 +8,7 @@ import (
 
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 )
 
 func TestChooseBanner(t *testing.T) {
@@ -89,9 +90,9 @@ func TestChooseBanner(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			rand.Seed(time.Now().UnixNano()) // seed the random number generator
+			rand.New(rand.NewSource(time.Now().UnixNano()))
 			bestRotation, err := ChooseBanner(tt.rotations)
-			if err != tt.expectedErr {
+			if !errors.Is(err, tt.expectedErr) {
 				t.Errorf("expected error %v, got %v", tt.expectedErr, err)
 			}
 			if !reflect.DeepEqual(bestRotation, tt.expected) {

@@ -4,17 +4,18 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"os"
+	"os/signal"
+	"sync"
+	"syscall"
+	"time"
+
 	rotator "github.com/NoisyPunk/multiarmedbandit/internal/app"
 	"github.com/NoisyPunk/multiarmedbandit/internal/configs"
 	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
 	internalgrpc "github.com/NoisyPunk/multiarmedbandit/internal/server/grpc"
 	"github.com/NoisyPunk/multiarmedbandit/internal/storage"
 	"go.uber.org/zap"
-	"os"
-	"os/signal"
-	"sync"
-	"syscall"
-	"time"
 )
 
 var configFile string

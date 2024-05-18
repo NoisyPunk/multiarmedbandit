@@ -9,10 +9,10 @@ import (
 	"google.golang.org/grpc"
 )
 
-func (e *GRPCServer) loggingInterceptor(ctx context.Context, request interface{},
+func (g *GRPCServer) loggingInterceptor(ctx context.Context, request interface{},
 	serverInfo *grpc.UnaryServerInfo, grpcHandler grpc.UnaryHandler,
 ) (interface{}, error) {
-	l := logger.FromContext(e.ctx)
+	l := logger.FromContext(g.ctx)
 	start := time.Now()
 	dateTime := time.DateTime
 

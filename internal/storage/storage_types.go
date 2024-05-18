@@ -19,7 +19,6 @@ type Group struct {
 type Slot struct {
 	ID          uuid.UUID `db:"id"`
 	Description string    `db:"description"`
-	banners     []Banner  `db:"banners"`
 }
 
 type Rotation struct {
@@ -41,7 +40,7 @@ type Storager interface {
 	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
 
 	AddRotation(ctx context.Context, bannerID, slotID, groupID uuid.UUID) (id uuid.UUID, err error)
-	GetRotationsForSlot(ctx context.Context, slotID, groupID uuid.UUID) (rotations []Rotation, err error)
-	RegisterClick(ctx context.Context, rotationId uuid.UUID) (err error)
-	RegisterShown(ctx context.Context, rotationId uuid.UUID) (err error)
+	GetSlotRotations(ctx context.Context, slotID, groupID uuid.UUID) (rotations []Rotation, err error)
+	RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error)
+	RegisterShown(ctx context.Context, rotationID uuid.UUID) (err error)
 }

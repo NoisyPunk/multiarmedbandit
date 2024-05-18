@@ -21,31 +21,31 @@ type GRPCServer struct {
 	pb.UnimplementedRotatorServer
 }
 
-func (e *GRPCServer) Start() error {
-	l := logger.FromContext(e.ctx)
+func (g *GRPCServer) Start() error {
+	l := logger.FromContext(g.ctx)
 
-	e.server = grpc.NewServer(grpc.UnaryInterceptor(e.loggingInterceptor))
+	g.server = grpc.NewServer(grpc.UnaryInterceptor(g.loggingInterceptor))
 
-	listener, err := net.Listen("tcp", e.port)
+	listener, err := net.Listen("tcp", g.port)
 	if err != nil {
 		return err
 	}
-	pb.RegisterRotatorServer(e.server, e)
+	pb.RegisterRotatorServer(g.server, g)
 
 	go func() error {
-		err = e.server.Serve(listener)
+		err = g.server.Serve(listener)
 		if err != nil {
 			return err
 		}
 		return nil
 	}()
-	l.Debug("grpc server started", zap.String("server port", e.port))
-	<-e.ctx.Done()
+	l.Debug("grpc server started", zap.String("server port", g.port))
+	<-g.ctx.Done()
 	return nil
 }
 
-func (e *GRPCServer) Stop() {
-	e.server.GracefulStop()
+func (g *GRPCServer) Stop() {
+	g.server.GracefulStop()
 }
 
 func NewGRPCServer(ctx context.Context, app rotator.Application, port string) *GRPCServer {

@@ -29,8 +29,6 @@ func ChooseBanner(rotations []storage.Rotation) (bestRotation storage.Rotation, 
 
 func randomRotation(rotations []storage.Rotation) (randomRotation storage.Rotation) {
 	bannerIDs := make([]storage.Rotation, 0, len(rotations))
-	for _, rotation := range rotations {
-		bannerIDs = append(bannerIDs, rotation)
-	}
+	bannerIDs = append(bannerIDs, rotations...)
 	return bannerIDs[rand.Intn(len(bannerIDs))] //nolint: gosec
 }

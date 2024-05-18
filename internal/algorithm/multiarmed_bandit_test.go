@@ -78,7 +78,7 @@ func TestChooseBanner(t *testing.T) {
 				},
 			},
 			expected: storage.Rotation{
-				ID:       id2,
+				ID:       id3,
 				BannerID: id4,
 				GroupID:  id1,
 				SlotID:   id2,

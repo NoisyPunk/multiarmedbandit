@@ -7,14 +7,22 @@ import (
 )
 
 type Config struct {
-	Server Server `yaml:"server"`
-	DSN    Dsn    `yaml:"dsn"`
+	Server   Server   `yaml:"server"`
+	DSN      Dsn      `yaml:"dsn"`
+	RmqCreds RmqCreds `yaml:"rmq"`
 }
 
 type Server struct {
 	Host     string `yaml:"host"`
 	GrpcPort string `yaml:"grpcPort"`
 	LogLevel string `yaml:"logLevel"`
+}
+
+type RmqCreds struct {
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
 }
 
 type Dsn struct {

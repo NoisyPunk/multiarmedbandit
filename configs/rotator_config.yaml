@@ -10,3 +10,9 @@ dsn:
   password: "postgres"
   dbname: "rotator"
   ssl: "disable"
+
+rmq:
+  user: user
+  password: pass
+  host: "rabbitmq"
+  port: "5672"

@@ -40,6 +40,7 @@ type Storager interface {
 	AddSlot(ctx context.Context, description string) (id uuid.UUID, err error)
 
 	AddRotation(ctx context.Context, bannerID, slotID, groupID uuid.UUID) (id uuid.UUID, err error)
+	GetRotation(ctx context.Context, rotationID uuid.UUID) (rotation Rotation, err error)
 	GetSlotRotations(ctx context.Context, slotID, groupID uuid.UUID) (rotations []Rotation, err error)
 	RegisterClick(ctx context.Context, rotationID uuid.UUID) (err error)
 	RegisterShown(ctx context.Context, rotationID uuid.UUID) (err error)

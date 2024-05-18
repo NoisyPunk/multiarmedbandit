@@ -2,7 +2,13 @@ package rotator
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/NoisyPunk/multiarmedbandit/internal/logger"
+	"github.com/NoisyPunk/multiarmedbandit/internal/queue"
+	"github.com/streadway/amqp"
+	"go.uber.org/zap"
+	"time"
 
 	"github.com/NoisyPunk/multiarmedbandit/internal/algorithm"
 	rotatorconfig "github.com/NoisyPunk/multiarmedbandit/internal/configs"
@@ -11,10 +17,12 @@ import (
 )
 
 type App struct {
-	Storage storage.Storage
+	Storage  storage.Storage
+	Producer *queue.Producer
 }
 
 func New(ctx context.Context, config *rotatorconfig.Config) (*App, error) {
+	l := logger.FromContext(ctx)
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		config.DSN.Host, config.DSN.Port, config.DSN.User, config.DSN.Password, config.DSN.DBName, config.DSN.Ssl)
 
@@ -24,8 +32,14 @@ func New(ctx context.Context, config *rotatorconfig.Config) (*App, error) {
 		return nil, err
 	}
 
+	producer, err := queue.NewProducer(l, config)
+	if err != nil {
+		return nil, err
+	}
+
 	return &App{
-		Storage: *store,
+		Storage:  *store,
+		Producer: producer,
 	}, nil
 }
 
@@ -84,6 +98,10 @@ func (a App) ChooseRotationForSlot(ctx context.Context, slotID, groupID string) 
 		return rotation, err
 	}
 	err = a.Storage.RegisterShown(ctx, bestRotation.ID)
+	if err != nil {
+		return rotation, err
+	}
+	err = a.publishShown(ctx, bestRotation)
 	return bestRotation, err
 }
 
@@ -92,5 +110,73 @@ func (a App) RegisterClick(ctx context.Context, rotationID string) (err error) {
 	if err != nil {
 		return err
 	}
+	err = a.publishClick(ctx, rotationUUID)
+	if err != nil {
+		return err
+	}
 	return a.Storage.RegisterClick(ctx, rotationUUID)
+}
+
+func (a App) publishClick(ctx context.Context, rotationID uuid.UUID) (err error) {
+	l := logger.FromContext(ctx)
+
+	rotation, err := a.Storage.GetRotation(ctx, rotationID)
+	if err != nil {
+		return err
+	}
+
+	message := queue.Event{
+		Name:        "Show",
+		SlotID:      rotation.SlotID.String(),
+		BannerID:    rotation.BannerID.String(),
+		GroupID:     rotation.GroupID.String(),
+		DateAndTime: time.Now(),
+	}
+
+	j, err := json.Marshal(message)
+	if err != nil {
+		l.Error("can't marshal event for queue", zap.String("error_message", err.Error()))
+	}
+
+	err = a.Producer.RmqChannel.Publish(
+		"",
+		"CalendarQueue",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "json",
+			Body:        j,
+		},
+	)
+	return err
+
+}
+
+func (a App) publishShown(ctx context.Context, rotation storage.Rotation) (err error) {
+	l := logger.FromContext(ctx)
+
+	message := queue.Event{
+		Name:        "Show",
+		SlotID:      rotation.SlotID.String(),
+		BannerID:    rotation.BannerID.String(),
+		GroupID:     rotation.GroupID.String(),
+		DateAndTime: time.Now(),
+	}
+
+	j, err := json.Marshal(message)
+	if err != nil {
+		l.Error("can't marshal event for queue", zap.String("error_message", err.Error()))
+	}
+
+	err = a.Producer.RmqChannel.Publish(
+		"",
+		"CalendarQueue",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "json",
+			Body:        j,
+		},
+	)
+	return err
 }

@@ -29,7 +29,8 @@ test:
 	go test -race ./internal/... -short
 
 integration-tests:
-	docker-compose up -d --force-recreate --remove-orphans && \
+	docker build -t rotator -f ./build/Dockerfile .
+	docker-compose up -d --force-recreate && \
 	go test -race ./internal/server/...
 	docker-compose down
 

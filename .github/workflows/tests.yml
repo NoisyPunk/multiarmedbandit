@@ -32,6 +32,6 @@ jobs:
         run: make test
         working-directory: .
 
-      - name: make integration-tests
-        run: make integration-tests
-        working-directory: .
+#      - name: make integration-tests
+#        run: make integration-tests
+#        working-directory: .

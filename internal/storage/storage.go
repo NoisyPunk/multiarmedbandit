@@ -140,7 +140,7 @@ func (s *Storage) GetRotation(ctx context.Context, rotationID uuid.UUID) (rotati
 func (s *Storage) GetSlotRotations(ctx context.Context, slotID, groupID uuid.UUID) (rotations []Rotation, err error) {
 	l := logger.FromContext(ctx)
 
-	query := `SELECT * FROM rotations where slot_id = $1 and group_id = $2`
+	query := `SELECT * FROM rotations where slot_id = $1 and group_id = $2 order by clicks DESC`
 
 	err = s.DB.Select(&rotations, query, slotID, groupID)
 	if err != nil {

@@ -17,13 +17,7 @@ func ChooseBanner(rotations []storage.Rotation) (bestRotation storage.Rotation, 
 	if rand.Float64() < epsilon { //nolint: gosec
 		return randomRotation(rotations), err
 	}
-	maxClicks := -1
-	for _, rotation := range rotations {
-		if rotation.Clicks > maxClicks {
-			maxClicks = rotation.Clicks
-			bestRotation = rotation
-		}
-	}
+	bestRotation = rotations[0]
 	return bestRotation, err
 }
 

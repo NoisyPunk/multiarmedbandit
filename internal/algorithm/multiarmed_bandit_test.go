@@ -57,7 +57,7 @@ func TestChooseBanner(t *testing.T) {
 					BannerID: id2,
 					GroupID:  id3,
 					SlotID:   id4,
-					Clicks:   10,
+					Clicks:   30,
 					Shows:    0,
 				},
 				{
@@ -73,15 +73,15 @@ func TestChooseBanner(t *testing.T) {
 					BannerID: id4,
 					GroupID:  id1,
 					SlotID:   id2,
-					Clicks:   30,
+					Clicks:   10,
 					Shows:    0,
 				},
 			},
 			expected: storage.Rotation{
-				ID:       id3,
-				BannerID: id4,
-				GroupID:  id1,
-				SlotID:   id2,
+				ID:       id1,
+				BannerID: id2,
+				GroupID:  id3,
+				SlotID:   id4,
 				Clicks:   30,
 				Shows:    0,
 			},
@@ -117,7 +117,7 @@ func TestChooseBannerProportions(t *testing.T) {
 					BannerID: id1,
 					GroupID:  id1,
 					SlotID:   id1,
-					Clicks:   10,
+					Clicks:   30,
 					Shows:    0,
 				},
 				{
@@ -125,7 +125,7 @@ func TestChooseBannerProportions(t *testing.T) {
 					BannerID: id2,
 					GroupID:  id2,
 					SlotID:   id2,
-					Clicks:   30,
+					Clicks:   10,
 					Shows:    0,
 				},
 			},
@@ -140,7 +140,7 @@ func TestChooseBannerProportions(t *testing.T) {
 			rand.New(rand.NewSource(time.Now().UnixNano()))
 			for i := 0; i < tt.showQuantity; i++ {
 				bestRotation, _ := ChooseBanner(tt.rotations)
-				if bestRotation.ID == id2 {
+				if bestRotation.ID == id1 {
 					bbr++
 					continue
 				}
